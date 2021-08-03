@@ -72,13 +72,14 @@ export class HotwalletApi {
      * to Hotwallet and accumulates event tasks in the queue.
      * @param eventName the event name
      * @param eventNameResult the event name result
-     * @param eventParams the event parameters
+     * @param timeout the optional timeout of the rejection timer. It defaults to 30seconds
+     * @param eventParams the optional event parameters
      * @return Promise<T> a custom promise
      */
-    private newPromise<T>(eventName: string, eventNameResult: string, eventParams?: any): Promise<T> {
+    private newPromise<T>(eventName: string, eventNameResult: string, timeout: number = this.PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const taskId = uuidv4()
-            const timeoutRejectionTimer = setTimeout(() => this.eventQueueTimeoutRejectionHandler(eventNameResult, taskId), this.PROMISE_TIMEOUT)
+            const timeoutRejectionTimer = setTimeout(() => this.eventQueueTimeoutRejectionHandler(eventNameResult, taskId), timeout)
             this.queue.set(eventNameResult + ':' + taskId, new EventTask(taskId, eventNameResult, resolve, reject, timeoutRejectionTimer))
 
             // send event
@@ -104,8 +105,13 @@ export class HotwalletApi {
         while (document.readyState !== 'complete') {
             await this.wait(1000)
         }
-        const result = await this.newPromise<Extension>('onHotwalletExtension', 'onHotwalletExtensionResult')
-        return Promise.resolve(result && result.running ? result.running : false)
+
+        try {
+            const result = await this.newPromise<Extension>('onHotwalletExtension', 'onHotwalletExtensionResult', 10000)
+            return Promise.resolve(result && result.running ? result.running : false)
+        } catch (e) {
+            return Promise.resolve(false)
+        }
     }
 
     /**
@@ -122,6 +128,6 @@ export class HotwalletApi {
      * @return Promise<TransactionResult> the promise result of the transaction result
      */
     public async sendTransaction(transaction: Transaction): Promise<TransactionResult> {
-        return this.newPromise('onHotwalletTransaction', 'onHotwalletTransactionResult', {transaction: transaction})
+        return this.newPromise('onHotwalletTransaction', 'onHotwalletTransactionResult', this.PROMISE_TIMEOUT, {transaction: transaction})
     }
 }

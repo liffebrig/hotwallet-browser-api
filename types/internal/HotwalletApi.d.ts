@@ -31,7 +31,8 @@ export declare class HotwalletApi {
      * to Hotwallet and accumulates event tasks in the queue.
      * @param eventName the event name
      * @param eventNameResult the event name result
-     * @param eventParams the event parameters
+     * @param timeout the optional timeout of the rejection timer. It defaults to 30seconds
+     * @param eventParams the optional event parameters
      * @return Promise<T> a custom promise
      */
     private newPromise;
