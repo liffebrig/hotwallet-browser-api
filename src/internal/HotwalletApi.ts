@@ -17,6 +17,9 @@ export class HotwalletApi {
     private readonly queue: Map<string, EventTask> = new Map<string, EventTask>()
 
     constructor() {
+        if (typeof window === "undefined" || typeof window.document === "undefined") {
+           throw new Error("Not running in browser")
+        }
 
         // hotwallet event result
         document.addEventListener('hotwalletResult', (evt: any) => {
