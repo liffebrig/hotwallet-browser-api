@@ -1,0 +1,61 @@
+{
+  "name": "hotwallet-api",
+  "version": "1.0.0",
+  "description": "A JavaScript/TypeScript api for interacting with Hotwallet, the browser extension of Hotmoka's blockchain wallet",
+  "main": "dist/hotwalletApi.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "types": "npx tsc --declaration --outDir ./types --emitDeclarationOnly",
+    "bundle": "npm run clean && npm run lint && npx webpack --mode production && npm run types && npm run clean:dist",
+    "preversion": "npm run test:all",
+    "version": "npm run bundle && git add -A dist && git add -A types",
+    "postversion": "git push && git push --tags",
+    "clean": "npx rimraf dist && npx rimraf types",
+    "clean:dist": "npx rimraf dist/*.txt",
+    "test:all": "mocha -r ts-node/register test/**/**.ts"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "keywords": [
+    "hotwallet",
+    "api",
+    "hotmoka",
+    "hotweb3",
+    "client",
+    "blockchain",
+    "JavaScript",
+    "TypeScript"
+  ],
+  "author": {
+    "name": "Dinu Berinde",
+    "email": "dinu2193@gmail.com",
+    "url": "https://github.com/DinuBerinde"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hotmoka/hotwallet-browser-api.git"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.18",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.3.0",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "chai": "^4.3.4",
+    "eslint": "^7.26.0",
+    "mocha": "^8.4.0",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^9.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
