@@ -13,13 +13,13 @@ export class EventTaskHandler {
      * Adds a new task to the queue of the tasks.
      * The task will be rejected after the given timeout.
      * @param eventName the event name
-     * @param eventNameResult the event name result
      * @param taskId the id of the current task
      * @param resolve the resolve function of the promise task
      * @param reject the reject function of the promise task
      * @param timeout the optional timeout of the rejection timer. It defaults to 30 seconds
      */
-    public addTask(eventName: string, eventNameResult: string, taskId: string, resolve: any, reject: any, timeout: number): void {
+    public addTask(eventName: string, taskId: string, resolve: any, reject: any, timeout: number): void {
+        const eventNameResult = eventName + '#result'
         const timeoutRejectionTimer = setTimeout(() => this.handleTimeoutRejection(eventNameResult, taskId), timeout)
         this.queue.set(eventNameResult + ':' + taskId, new EventTask(taskId, eventNameResult, resolve, reject, timeoutRejectionTimer))
     }
@@ -30,7 +30,7 @@ export class EventTaskHandler {
      * @param data the data
      */
     public handleResult(data: Record<string, any>): void {
-        const eventName = data.eventName
+        const eventName = data.eventName + '#result'
         const taskId = data.taskId
         const result = data.result
         const error = result.error

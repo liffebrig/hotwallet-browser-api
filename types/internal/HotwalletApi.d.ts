@@ -23,7 +23,6 @@ export declare class HotwalletApi {
     /**
      * Dispatches custom events to Hotwallet browser extension.
      * @param eventName the event name
-     * @param eventNameResult the event name result
      * @param timeout the optional timeout of the rejection timer. It defaults to 30 seconds
      * @param eventParams the optional event parameters
      * @return Promise<T> a promise

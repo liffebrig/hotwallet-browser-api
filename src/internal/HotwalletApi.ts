@@ -38,15 +38,14 @@ export class HotwalletApi {
     /**
      * Dispatches custom events to Hotwallet browser extension.
      * @param eventName the event name
-     * @param eventNameResult the event name result
      * @param timeout the optional timeout of the rejection timer. It defaults to 30 seconds
      * @param eventParams the optional event parameters
      * @return Promise<T> a promise
      */
-    private sendEvent<T>(eventName: string, eventNameResult: string, timeout: number = this.PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
+    private sendEvent<T>(eventName: string, timeout: number = this.PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const taskId = uuidv4()
-            this.eventTaskHandler.addTask(eventName, eventNameResult, taskId, resolve, reject, timeout)
+            this.eventTaskHandler.addTask(eventName, taskId, resolve, reject, timeout)
 
             this.channel.sendMessage({
                 eventName: eventName,
@@ -61,7 +60,7 @@ export class HotwalletApi {
      * @return Promise<Connection> the promise result with the wallet details
      */
     public async connect(): Promise<Connection> {
-        return this.sendEvent('onHotwalletConnect', 'onHotwalletConnected')
+        return this.sendEvent('HotwalletConnect')
     }
 
     /**
@@ -70,6 +69,6 @@ export class HotwalletApi {
      * @return Promise<TransactionResult> the promise result of the transaction result
      */
     public async sendTransaction(transaction: Transaction): Promise<TransactionResult> {
-        return this.sendEvent('onHotwalletTransaction', 'onHotwalletTransactionResult', this.PROMISE_TIMEOUT, {transaction: transaction})
+        return this.sendEvent('HotwalletTransaction', this.PROMISE_TIMEOUT, {transaction: transaction})
     }
 }
