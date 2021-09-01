@@ -1,10 +1,10 @@
 // hotwallet
 export {HotwalletApi} from './internal/HotwalletApi'
+export {Channel} from './internal/Channel'
 
 // models
 export {Account} from './internal/models/Account'
 export {Connection} from './internal/models/Connection'
-export {Extension} from './internal/models/Extension'
 export {StorageReference} from './internal/models/values/StorageReference'
 export {StorageValue} from './internal/models/values/StorageValue'
 export {StorageValueFactory} from './internal/models/values/StorageValueFactory'
