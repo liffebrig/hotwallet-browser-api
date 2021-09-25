@@ -1,7 +1,7 @@
-import { Connection } from "./models/Connection";
 import { Transaction } from "./models/transaction/Transaction";
 import { TransactionResult } from "./models/transaction/TransactionResult";
 import { Channel } from "./Channel";
+import { Account } from "./models/Account";
 export declare class HotwalletApi {
     /**
      * The timeout of the promise rejection.
@@ -30,13 +30,18 @@ export declare class HotwalletApi {
     private sendEvent;
     /**
      * It connects to Hotwallet.
-     * @return Promise<Connection> the promise result with the wallet details
+     * @return Promise<Connection> a promise that resolves to a {@link Account} object
      */
-    connect(): Promise<Connection>;
+    connect(): Promise<Account>;
     /**
      * Sends a transaction to Hotwallet.
      * @param transaction the transaction
-     * @return Promise<TransactionResult> the promise result of the transaction result
+     * @return Promise<TransactionResult> a promise that resolves to the result of the transaction
      */
     sendTransaction(transaction: Transaction): Promise<TransactionResult>;
 }
+/**
+ * Checks if the Hotwallet extension is available.
+ * @return Promise<boolean> a promise that resolves to true if the extension is available, false otherwise
+ */
+export declare const isExtensionAvailable: () => Promise<boolean>;

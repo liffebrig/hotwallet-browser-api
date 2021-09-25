@@ -1,10 +1,11 @@
 import { MethodSignature } from "../signatures/MethodSignature";
+import { TransactionReference } from "../values/TransactionReference";
+import { StorageReference } from "../values/StorageReference";
 import { StorageValue } from "../values/StorageValue";
 export interface Transaction {
-    caller: string;
-    smartContractAddress: string;
+    smartContractAddress: TransactionReference;
     methodSignature: MethodSignature;
-    receiver: string;
+    receiver: StorageReference;
     actuals: Array<StorageValue>;
     amount: string;
     name: string;

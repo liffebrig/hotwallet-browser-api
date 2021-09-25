@@ -1,9 +1,9 @@
-import {Connection} from "./models/Connection";
 import {Transaction} from "./models/transaction/Transaction";
 import {TransactionResult} from "./models/transaction/TransactionResult";
 import { v4 as uuidv4 } from 'uuid';
 import {Channel} from "./Channel";
 import {EventTaskHandler} from "./EventTaskHandler";
+import {Account} from "./models/Account";
 
 export class HotwalletApi {
     /**
@@ -57,18 +57,44 @@ export class HotwalletApi {
 
     /**
      * It connects to Hotwallet.
-     * @return Promise<Connection> the promise result with the wallet details
+     * @return Promise<Connection> a promise that resolves to a {@link Account} object
      */
-    public async connect(): Promise<Connection> {
+    public connect(): Promise<Account> {
         return this.sendEvent('HotwalletConnect')
     }
 
     /**
      * Sends a transaction to Hotwallet.
      * @param transaction the transaction
-     * @return Promise<TransactionResult> the promise result of the transaction result
+     * @return Promise<TransactionResult> a promise that resolves to the result of the transaction
      */
-    public async sendTransaction(transaction: Transaction): Promise<TransactionResult> {
+    public sendTransaction(transaction: Transaction): Promise<TransactionResult> {
         return this.sendEvent('HotwalletTransaction', this.PROMISE_TIMEOUT, {transaction: transaction})
     }
+}
+
+const wait = (ms: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+/**
+ * Checks if the Hotwallet extension is available.
+ * @return Promise<boolean> a promise that resolves to true if the extension is available, false otherwise
+ */
+export const isExtensionAvailable = async (): Promise<boolean> => {
+    while (document.readyState !== 'complete') {
+        await wait(1000)
+    }
+
+    let hotwalletExtension = false
+    let counter = 3;
+    while(counter-- !== 0) {
+        if ((window as any).hotwalletApi) {
+            hotwalletExtension = true
+            break
+        }
+        await wait(1000)
+    }
+
+    return hotwalletExtension
 }

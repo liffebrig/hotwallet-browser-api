@@ -1,4 +1,4 @@
-import { StorageValue } from "../values/StorageValue";
+import {StorageValue} from "../values/StorageValue";
 
 export interface TransactionResult {
     status: boolean
