@@ -1,42 +1,54 @@
 # hotwallet-api
-A JavaScript/TypeScript browser api for interacting with [Hotwallet](https://github.com/Hotmoka/hotwallet-browser.git), the browser extension of [Hotmoka's](https://www.hotmoka.io) blockchain wallet
+A JavaScript/TypeScript browser api for interacting with [Hotwallet](https://github.com/Hotmoka/hotwallet-browser.git), the wallet browser extension of [Hotmoka](https://www.hotmoka.io) blockchain.
+This library gets injected by the Hotwallet browser extension into the current document.
 
 ## Usage
 
-```html
-// In Browser
-<script src="dist/hotwalletApi.js"></script>
-
-<script type="application/javascript">
-    const hotwalletApi = new hotwallet.HotwalletApi();
-    (async function() {
-        try {
-            const hotwalletInstalled = await hotwalletApi.isExtensionInstalled();
-            if (hotwalletInstalled) {
-              alert('Hotwallet browser extension is installed!')  
-            } 
-        } catch (e) {
-            console.error(e);
-        }
-    })();
-</script>
-```
-
 ```js
-// In some JavaScript/Typescript front-end framework
-import { HotwalletApi } from 'hotwallet-api'
+import { isExtensionAvailable, StorageValueFactory } from 'hotwallet-api'
 
-const hotwalletApi = new HotwalletApi()
-(async function () {
-    try {
-        const hotwalletInstalled = await hotwalletApi.isExtensionInstalled();
-        if (hotwalletInstalled) {
-            alert('Hotwallet browser extension is installed!')
-        }
-    } catch (e) {
-        console.error(e);
+// check if Hotwallet extension is available 
+isExtensionAvailable().then(isAvailable => {
+    
+    if (isAvailable) {
+        // access hotwalletApi instance of window object
+        // try to connect to Hotwallet
+        window.hotwalletApi.connect().then(account => {
+            alert('Connected successfully Hotwallet')
+        })
+        .catch(err => alert(err.message))
+    } else {
+        alert('Hotwallet extension not installed')
     }
-})()
+})
+.catch(() => alert('Hotwallet extension not installed'))
+
+// send transaction
+window.hotwalletApi.sendTransaction({
+    smartContractAddress: {
+        type: 'local',
+        hash: '...'
+    },
+    methodSignature: {
+        instanceMethod: true,
+        voidMethod: true,
+        definingClass: 'HelloWorld',
+        methodName: 'testMe',
+        formals: ['java.math.BigInteger', 'java.lang.String']
+    },
+    receiver: {
+        type: 'local',
+        hash: '...'
+    },
+    actuals: [
+        StorageValueFactory.newStorageValue('20000', 'java.math.BigInteger'),
+        StorageValueFactory.newStorageValue('hello world', 'java.lang.String'),
+    ],
+    amount: '5000',
+    name: 'Transaction test'
+})
+.then(result => ...)
+.catch(err => ...)
 ```
 
 
