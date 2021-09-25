@@ -7,9 +7,14 @@ import {Account} from "./models/Account";
 
 export class HotwalletApi {
     /**
-     * The timeout of the promise rejection.
+     * The default timeout of the promise rejection.
      */
-    private readonly PROMISE_TIMEOUT = 30000
+    private readonly DEFAULT_PROMISE_TIMEOUT = 30000
+
+    /**
+     * The timeout of the promise rejection of a transaction.
+     */
+    private readonly TRANSACTION_PROMISE_TIMEOUT = 60000
 
     /**
      * The handler of the event task.
@@ -42,7 +47,7 @@ export class HotwalletApi {
      * @param eventParams the optional event parameters
      * @return Promise<T> a promise
      */
-    private sendEvent<T>(eventName: string, timeout: number = this.PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
+    private sendEvent<T>(eventName: string, timeout: number = this.DEFAULT_PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const taskId = uuidv4()
             this.eventTaskHandler.addTask(eventName, taskId, resolve, reject, timeout)
@@ -69,7 +74,7 @@ export class HotwalletApi {
      * @return Promise<TransactionResult> a promise that resolves to the result of the transaction
      */
     public sendTransaction(transaction: Transaction): Promise<TransactionResult> {
-        return this.sendEvent('HotwalletTransaction', this.PROMISE_TIMEOUT, {transaction: transaction})
+        return this.sendEvent('HotwalletTransaction', this.TRANSACTION_PROMISE_TIMEOUT, {transaction: transaction})
     }
 }
 
