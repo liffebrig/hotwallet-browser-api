@@ -4,9 +4,13 @@ import { Channel } from "./Channel";
 import { Account } from "./models/Account";
 export declare class HotwalletApi {
     /**
-     * The timeout of the promise rejection.
+     * The default timeout of the promise rejection.
      */
-    private readonly PROMISE_TIMEOUT;
+    private readonly DEFAULT_PROMISE_TIMEOUT;
+    /**
+     * The timeout of the promise rejection of a transaction.
+     */
+    private readonly TRANSACTION_PROMISE_TIMEOUT;
     /**
      * The handler of the event task.
      */
