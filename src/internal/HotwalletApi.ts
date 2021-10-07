@@ -14,7 +14,7 @@ export class HotwalletApi {
     /**
      * The timeout of the promise rejection of a transaction.
      */
-    private readonly TRANSACTION_PROMISE_TIMEOUT = 60000
+    private readonly TRANSACTION_PROMISE_TIMEOUT = 120000
 
     /**
      * The handler of the event task.
@@ -47,7 +47,7 @@ export class HotwalletApi {
      * @param eventParams the optional event parameters
      * @return Promise<T> a promise
      */
-    private sendEvent<T>(eventName: string, timeout: number = this.DEFAULT_PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
+    private sendEvent<T>(eventName: string, timeout = this.DEFAULT_PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const taskId = uuidv4()
             this.eventTaskHandler.addTask(eventName, taskId, resolve, reject, timeout)
