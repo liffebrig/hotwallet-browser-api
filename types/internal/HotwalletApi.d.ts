@@ -12,9 +12,9 @@ export declare class HotwalletApi {
      */
     private readonly TRANSACTION_PROMISE_TIMEOUT;
     /**
-     * The handler of the event task.
+     * The handler of the events.
      */
-    private readonly eventTaskHandler;
+    private readonly eventsHandler;
     /**
      * The communication channel of the API.
      */
@@ -43,6 +43,11 @@ export declare class HotwalletApi {
      * @return Promise<TransactionResult> a promise that resolves to the result of the transaction
      */
     sendTransaction(transaction: Transaction): Promise<TransactionResult>;
+    /**
+     * Event that notifies when the user disconnected from Hotwallet.
+     * @param callback the callback that will get invoked when the event happens.
+     */
+    onDisconnected(callback: () => void): void;
 }
 /**
  * Checks if the Hotwallet extension is available.

@@ -2,7 +2,7 @@ import {Transaction} from "./models/transaction/Transaction";
 import {TransactionResult} from "./models/transaction/TransactionResult";
 import { v4 as uuidv4 } from 'uuid';
 import {Channel} from "./Channel";
-import {EventTaskHandler} from "./EventTaskHandler";
+import {EventsHandler} from "./EventsHandler";
 import {Account} from "./models/Account";
 
 export class HotwalletApi {
@@ -17,14 +17,16 @@ export class HotwalletApi {
     private readonly TRANSACTION_PROMISE_TIMEOUT = 120000
 
     /**
-     * The handler of the event task.
+     * The handler of the events.
      */
-    private readonly eventTaskHandler = new EventTaskHandler()
+    private readonly eventsHandler = new EventsHandler()
 
     /**
      * The communication channel of the API.
      */
     private readonly channel
+
+
 
     /**
      * Constructs an instance of the API with it's communication channel.
@@ -37,7 +39,7 @@ export class HotwalletApi {
         }
 
         this.channel = channel
-        this.channel.onData = (data: Record<string, any>) => this.eventTaskHandler.handleResult(data)
+        this.channel.onData = (data: Record<string, any>) => this.eventsHandler.handleResult(data)
     }
 
     /**
@@ -50,7 +52,7 @@ export class HotwalletApi {
     private sendEvent<T>(eventName: string, timeout = this.DEFAULT_PROMISE_TIMEOUT, eventParams?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const taskId = uuidv4()
-            this.eventTaskHandler.addTask(eventName, taskId, resolve, reject, timeout)
+            this.eventsHandler.addTask(eventName, taskId, resolve, reject, timeout)
 
             this.channel.sendMessage({
                 eventName: eventName,
@@ -75,6 +77,14 @@ export class HotwalletApi {
      */
     public sendTransaction(transaction: Transaction): Promise<TransactionResult> {
         return this.sendEvent('HotwalletTransaction', this.TRANSACTION_PROMISE_TIMEOUT, {transaction: transaction})
+    }
+
+    /**
+     * Event that notifies when the user disconnected from Hotwallet.
+     * @param callback the callback that will get invoked when the event happens.
+     */
+    public onDisconnected(callback: () => void): void {
+       this.eventsHandler.addEvent('onDisconnected', callback)
     }
 }
 

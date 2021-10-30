@@ -3,11 +3,16 @@ import {EventTask} from "./EventTask";
 /**
  * The handler of the event promise task.
  */
-export class EventTaskHandler {
+export class EventsHandler {
     /**
      * The queue of the event tasks.
      */
     private readonly queue: Map<string, EventTask> = new Map<string, EventTask>()
+
+    /**
+     * The map of the events callbacks.
+     */
+    private readonly events = new Map<string, (params?: unknown) => void>()
 
     /**
      * Adds a new task to the queue of the tasks.
@@ -25,11 +30,33 @@ export class EventTaskHandler {
     }
 
     /**
-     * It handles the task of an event from the queue.
-     * The task gets consumed and removed from the queue.
+     * It sets an event to the map of the events.
+     * @param eventName the event name
+     * @param callbackHandler the callback handler of the event
+     */
+    public addEvent(eventName: string, callbackHandler: (params?: unknown) => void): void {
+        this.events.set(eventName, callbackHandler)
+    }
+
+    /**
+     * It handles the result of an event.
+     * If the event is a task then the task gets consumed and removed from the queue.
+     * If the event is an event callback then the callback will be invoked.
      * @param data the data
      */
     public handleResult(data: Record<string, any>): void {
+        const type = data.type
+
+        if (type === 'event' && data.eventName) {
+            if (this.events.has(data.eventName)) {
+                const callback = this.events.get(data.eventName)
+                if (callback) {
+                    callback(data.result)
+                }
+            }
+            return
+        }
+
         const eventName = data.eventName + '#result'
         const taskId = data.taskId
         const result = data.result
