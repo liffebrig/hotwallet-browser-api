@@ -11,5 +11,5 @@ export interface Transaction {
     actuals: Array<StorageValue>
     amount: string,
     name: string,
-    dataToSign: ArrayBuffer
+    base64DataToSign: string
 }
