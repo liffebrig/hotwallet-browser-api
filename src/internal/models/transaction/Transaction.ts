@@ -10,5 +10,6 @@ export interface Transaction {
     receiver: StorageReference,
     actuals: Array<StorageValue>
     amount: string,
-    name: string
+    name: string,
+    dataToSign: ArrayBuffer
 }
