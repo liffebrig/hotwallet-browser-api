@@ -34,7 +34,7 @@ export class EventsHandler {
      * @param eventName the event name
      * @param callbackHandler the callback handler of the event
      */
-    public addEvent(eventName: string, callbackHandler: (params?: unknown) => void): void {
+    public addEvent(eventName: string, callbackHandler: (params?: any) => void): void {
         this.events.set(eventName, callbackHandler)
     }
 

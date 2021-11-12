@@ -25,7 +25,7 @@ export declare class EventsHandler {
      * @param eventName the event name
      * @param callbackHandler the callback handler of the event
      */
-    addEvent(eventName: string, callbackHandler: (params?: unknown) => void): void;
+    addEvent(eventName: string, callbackHandler: (params?: any) => void): void;
     /**
      * It handles the result of an event.
      * If the event is a task then the task gets consumed and removed from the queue.

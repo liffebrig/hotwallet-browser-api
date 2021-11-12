@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {Channel} from "./Channel";
 import {EventsHandler} from "./EventsHandler";
 import {Account} from "./models/Account";
+import {Network} from "./models/Network";
 
 export class HotwalletApi {
     /**
@@ -85,6 +86,33 @@ export class HotwalletApi {
      */
     public onDisconnected(callback: () => void): void {
        this.eventsHandler.addEvent('onDisconnected', callback)
+    }
+
+    /**
+     * Event that notifies when the user connected to Hotwallet.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the account connected
+     */
+    public onConnected(callback: (account: Account) => void): void {
+        this.eventsHandler.addEvent('onConnected', callback)
+    }
+
+    /**
+     * Event that notifies when the network has changed.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the new network
+     */
+    public onNetworkChanged(callback: (network: Network) => void): void {
+        this.eventsHandler.addEvent('onNetworkChanged', callback)
+    }
+
+    /**
+     * Event that notifies when the user connected to a different account.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the new account connected
+     */
+    public onAccountChanged(callback: (account: Account) => void): void {
+        this.eventsHandler.addEvent('onAccountChanged', callback)
     }
 }
 

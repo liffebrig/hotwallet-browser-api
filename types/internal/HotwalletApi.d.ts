@@ -2,6 +2,7 @@ import { Transaction } from "./models/transaction/Transaction";
 import { TransactionResult } from "./models/transaction/TransactionResult";
 import { Channel } from "./Channel";
 import { Account } from "./models/Account";
+import { Network } from "./models/Network";
 export declare class HotwalletApi {
     /**
      * The default timeout of the promise rejection.
@@ -48,6 +49,24 @@ export declare class HotwalletApi {
      * @param callback the callback that will get invoked when the event happens.
      */
     onDisconnected(callback: () => void): void;
+    /**
+     * Event that notifies when the user connected to Hotwallet.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the account connected
+     */
+    onConnected(callback: (account: Account) => void): void;
+    /**
+     * Event that notifies when the network has changed.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the new network
+     */
+    onNetworkChanged(callback: (network: Network) => void): void;
+    /**
+     * Event that notifies when the user connected to a different account.
+     * @param callback the callback that will get invoked when the event happens.
+     *                  The callback will get invoked with the new account connected
+     */
+    onAccountChanged(callback: (account: Account) => void): void;
 }
 /**
  * Checks if the Hotwallet extension is available.

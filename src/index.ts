@@ -5,6 +5,7 @@ export {Channel} from './internal/Channel'
 
 // models
 export {Account} from './internal/models/Account'
+export {Network} from './internal/models/Network'
 export {Transaction} from './internal/models/transaction/Transaction'
 export {TransactionResult} from './internal/models/transaction/TransactionResult'
 export {MethodSignature} from './internal/models/signatures/MethodSignature'
