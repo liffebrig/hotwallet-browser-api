@@ -1,6 +1,6 @@
 {
   "name": "hotwallet-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A JavaScript/TypeScript browser api for interacting with Hotwallet, the browser extension of Hotmoka's blockchain wallet",
   "main": "dist/hotwalletApi.js",
   "types": "./types/index.d.ts",
