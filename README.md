@@ -73,3 +73,9 @@ npm run bundle
 ```bash
 npm run test:all
 ```
+# https://tea.xyz/what-is-this-file
+---
+version: 1.0.0
+codeOwners:
+  - '0x611d75e641Fd3626C42c3547B16F5178063B4867'
+quorum: 1
